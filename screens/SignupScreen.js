@@ -1,100 +1,86 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {useState} from 'react';
-import {View, Text, StyleSheet, ImageBackground} from 'react-native';
-import {Avatar, TextInput, Button} from 'react-native-paper';
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  Text,
+  KeyboardAvoidingView,
+  ImageBackground,
+} from 'react-native';
+import {Avatar, Button, TextInput} from 'react-native-paper';
+import AuthContext from '../store/contexts/AuthContext';
 import {Heading, Title} from '../components/ui';
 
 const SignupScreen = props => {
-  const [fulname, setFullName] = useState('');
-  const [username, setUserName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigateUserLoginScreen = () => {
-    props.navigation.navigate('Sign In');
+  const [fullName, setFullName] = useState('');
+  const authContext = useContext(AuthContext);
+
+  const handleSignup = () => {
+    authContext.signUpUserWithFirebase({email, password, fullName});
+    props.navigation.navigate('Login');
   };
-  const navigateWellcomeScreen = () => {
-    props.navigation.navigate('Wellcome');
-  };
+
   return (
     <ImageBackground
       source={require('../assets/images/background.png')}
       style={styles.image}>
       <View style={styles.screen}>
         <Avatar.Image
-          size={160}
+          size={100}
           style={{
             resizeMode: 'cover',
             backgroundColor: 'transprant',
           }}
           source={require('../assets/images/student.png')}
         />
-        <Heading heading="Hello User!!!" />
+        <Text>Hello There!!!</Text>
       </View>
       <View style={styles.form}>
         <TextInput
           label="Full Name"
-          value={fulname}
-          onChangeText={fullname => setFullName(fullname)}
-          style={{
-            margin: 10,
-            backgroundColor: 'transprant',
-          }}
+          mode="outlined"
+          value={fullName}
+          onChangeText={text => setFullName(text)}
         />
         <TextInput
-          label="User Name"
-          value={username}
-          onChangeText={username => setUserName(usename)}
-          style={{
-            margin: 10,
-            backgroundColor: 'transprant',
-          }}
+          label="Email"
+          mode="outlined"
+          value={email}
+          onChangeText={text => setEmail(text)}
         />
         <TextInput
           label="Password"
+          mode="outlined"
           value={password}
-          onChangeText={password => setPassword(password)}
-          style={{
-            margin: 10,
-            backgroundColor: 'transprant',
-          }}
+          onChangeText={text => setPassword(text)}
         />
         <View style={styles.Button}>
           <Button
             icon="login"
             mode="contained"
-            onPress={navigateUserLoginScreen}
+            onPress={handleSignup}
             style={{
               borderRadius: 25,
               height: 50,
               backgroundColor: 'green',
             }}>
-            <Text
-              style={{
-                fontWeight: 'bold',
-                color: 'white',
-                letterSpacing: 2,
-              }}>
-              Save
-            </Text>
+            <Heading heading="Save" />
           </Button>
         </View>
         <View style={styles.Button}>
           <Button
             icon="close"
             mode="contained"
-            onPress={navigateWellcomeScreen}
+            onPress={() => props.navigation.navigate('Wellcome')}
             style={{
               borderRadius: 25,
               height: 50,
               backgroundColor: 'red',
             }}>
-            <Text
-              style={{
-                fontWeight: 'bold',
-                color: 'white',
-                letterSpacing: 2,
-              }}>
-              Cancle
-            </Text>
+            <Heading heading="Cancle" />
           </Button>
         </View>
       </View>
@@ -108,13 +94,12 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   screen: {
-    flex: 1,
-    marginTop: 50,
+    marginTop: 0,
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
   form: {
-    flex: 2,
+    flex: 3,
     padding: 10,
     flexDirection: 'column',
   },
@@ -123,4 +108,5 @@ const styles = StyleSheet.create({
     margin: 5,
   },
 });
+
 export default SignupScreen;

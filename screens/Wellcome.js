@@ -5,10 +5,10 @@ import {Heading, Title} from '../components/ui';
 
 const WellcomeScreen = props => {
   const navigateUserSignupScreen = () => {
-    props.navigation.navigate('Sign Up');
+    props.navigation.navigate('Signup');
   };
   const navigateUserSigninScreen = () => {
-    props.navigation.navigate('Sign In');
+    props.navigation.navigate('Login');
   };
   return (
     <View style={styles.screen}>

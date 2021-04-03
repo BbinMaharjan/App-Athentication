@@ -1,57 +1,18 @@
 import React from 'react';
-
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-
-import WellcomeScreen from '../screens/WellcomeScreen';
-import SignupScreen from '../screens/SignupScreen';
-import LoginScreen from '../screens/LoginScreen';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import TodosScreen from '../screens/TodosScreen';
 
-const MainNavigator = () => {
+const Tab = createBottomTabNavigator();
+
+const MainTabNavigator = () => {
   return (
-    <NavigationContainer>
-      <StackNavigator />
-    </NavigationContainer>
+    <Tab.Navigator>
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Todo" component={TodosScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+    </Tab.Navigator>
   );
 };
-
-const Stack = createStackNavigator();
-
-const StackNavigator = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Wellcome"
-        component={WellcomeScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="Sign Up"
-        component={SignupScreen}
-        options={{
-          headerTintColor: 'white',
-          headerStyle: {backgroundColor: 'red'},
-        }}
-      />
-      <Stack.Screen
-        name="Sign In"
-        component={LoginScreen}
-        options={{
-          headerTintColor: 'white',
-          headerStyle: {backgroundColor: 'green'},
-        }}
-      />
-      <Stack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          headerTintColor: 'white',
-          headerStyle: {backgroundColor: 'green'},
-        }}
-      />
-    </Stack.Navigator>
-  );
-};
-
-export default MainNavigator;
+export default MainTabNavigator;

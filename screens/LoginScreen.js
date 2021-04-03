@@ -1,97 +1,77 @@
 import React from 'react';
 import {useState} from 'react';
-import {View, Text, StyleSheet, ImageBackground} from 'react-native';
-import {Avatar, TextInput, Button} from 'react-native-paper';
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  Text,
+  ImageBackground,
+} from 'react-native';
+import {Avatar, Button, TextInput} from 'react-native-paper';
+import AuthContext from '../store/contexts/AuthContext';
+import {Heading, Title} from '../components/ui';
 
 const LoginScreen = props => {
-  const [username, setUserName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigateUserHomeScreen = () => {
-    props.navigation.navigate('Home');
-  };
-  const navigateSignUp = () => {
-    props.navigation.navigate('Sign Up');
-  };
+
+  const authContext = React.useContext(AuthContext);
+
   return (
     <ImageBackground
       source={require('../assets/images/background.png')}
       style={styles.image}>
       <View style={styles.screen}>
         <Avatar.Image
-          size={160}
+          size={100}
           style={{
             resizeMode: 'cover',
             backgroundColor: 'transprant',
           }}
           source={require('../assets/images/student.png')}
         />
-        <Text
-          style={{
-            fontWeight: 'bold',
-            letterSpacing: 2,
-            marginTop: 10,
-            fontSize: 20,
-          }}>
-          Hello User!!!
-        </Text>
+        <Text>Hello User!!!</Text>
       </View>
       <View style={styles.form}>
         <TextInput
-          label="User Name"
-          value={username}
-          onChangeText={username => setUserName(usename)}
-          style={{
-            margin: 10,
-            backgroundColor: 'transprant',
-          }}
+          label="Email"
+          mode="outlined"
+          value={email}
+          onChangeText={text => setEmail(text)}
         />
         <TextInput
           label="Password"
+          mode="outlined"
           value={password}
-          onChangeText={password => setPassword(password)}
-          style={{
-            margin: 10,
-            backgroundColor: 'transprant',
-          }}
+          onChangeText={text => setPassword(text)}
         />
+        {authContext.errorMessage !== '' && (
+          <Text style={{color: 'red'}}>{authContext.errorMessage}</Text>
+        )}
         <View style={styles.Button}>
           <Button
             icon="login"
             mode="contained"
-            onPress={navigateUserHomeScreen}
+            onPress={() => authContext.loginUserWithFirebase(email, password)}
             style={{
               borderRadius: 25,
               height: 50,
               backgroundColor: 'green',
             }}>
-            <Text
-              style={{
-                fontWeight: 'bold',
-                color: 'white',
-                letterSpacing: 2,
-              }}>
-              Sign In
-            </Text>
+            <Heading heading="Signin" />
           </Button>
         </View>
         <View style={styles.Button}>
           <Button
-            icon="login"
+            icon="close"
             mode="contained"
-            onPress={navigateSignUp}
+            onPress={() => props.navigation.navigate('Signup')}
             style={{
               borderRadius: 25,
               height: 50,
               backgroundColor: 'red',
             }}>
-            <Text
-              style={{
-                fontWeight: 'bold',
-                color: 'white',
-                letterSpacing: 2,
-              }}>
-              Sign UP
-            </Text>
+            <Heading heading="Signup" />
           </Button>
         </View>
       </View>
@@ -105,13 +85,12 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   screen: {
-    flex: 1,
-    marginTop: 50,
+    marginTop: 0,
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
   form: {
-    flex: 2,
+    flex: 3,
     padding: 10,
     flexDirection: 'column',
   },
