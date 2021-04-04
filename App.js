@@ -7,26 +7,30 @@ import AuthNavigation from './navigations/AuthNavigation';
 import AuthProvider from './store/providers/AuthProvider';
 import AuthContext from './store/contexts/AuthContext';
 import SplashScreen from './screens/SplashScreen';
+import {Provider} from 'react-redux';
+import store from './store';
 
 const App = () => {
   return (
     <AuthProvider>
-      <PaperProvider>
-        <NavigationContainer>
-          <AuthContext.Consumer>
-            {context => {
-              if (context.isAuthenticating) {
-                return <SplashScreen />;
-              }
-              return !context.isAuthenticated ? (
-                <AuthNavigation />
-              ) : (
-                <MainNavigation />
-              );
-            }}
-          </AuthContext.Consumer>
-        </NavigationContainer>
-      </PaperProvider>
+      <Provider store={store}>
+        <PaperProvider>
+          <NavigationContainer>
+            <AuthContext.Consumer>
+              {context => {
+                if (context.isAuthenticating) {
+                  return <SplashScreen />;
+                }
+                return !context.isAuthenticated ? (
+                  <AuthNavigation />
+                ) : (
+                  <MainNavigation />
+                );
+              }}
+            </AuthContext.Consumer>
+          </NavigationContainer>
+        </PaperProvider>
+      </Provider>
     </AuthProvider>
   );
 };

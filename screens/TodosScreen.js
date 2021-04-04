@@ -1,11 +1,15 @@
 import React from 'react';
 import {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {Button, Appbar, FAB, Modal, TextInput} from 'react-native-paper';
+import {Button, Appbar, FAB, Modal, TextInput, List} from 'react-native-paper';
+import {useDispatch, useSelector} from 'react-redux';
+import {addTodosToFirebase, getAllTodos} from '../store/actions/todos';
 
 const TodosScreen = props => {
   const [visible, setVisible] = useState(false);
   const [description, setDescription] = useState('');
+
+  const dispatch = useDispatch();
 
   const showModal = () => setVisible(true);
   const hideModal = () => {
@@ -14,14 +18,35 @@ const TodosScreen = props => {
   };
 
   const submitForm = () => {
+    const todo = {
+      description,
+    };
+    dispatch(addTodosToFirebase(todo));
     hideModal();
   };
+
+  const todos = useSelector(state => state.todosState.todos);
+
+  React.useEffect(() => {
+    dispatch(getAllTodos());
+  }, []);
+
   return (
     <View style={styles.screen}>
       <Appbar.Header style={{backgroundColor: 'green'}}>
         <Appbar.Content title="Todo" />
         <Appbar.Action icon="dots-vertical" />
       </Appbar.Header>
+      {todos.map(todo => {
+        return (
+          <List.Item
+            onPress={() => handleListTap(todo.id)}
+            key={todo.id}
+            description={todo.description}
+          />
+        );
+      })}
+
       <Modal
         visible={visible}
         onDismiss={hideModal}
