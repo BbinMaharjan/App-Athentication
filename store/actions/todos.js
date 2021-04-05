@@ -27,7 +27,6 @@ export const addTodosToFirebase = todo => async (dispatch, getState) => {
 export const getAllTodos = () => {
   return async dispatch => {
     const response = await axios.get(`${BASE_URL}/todos.json`);
-    console.log('BEFORE', response.data);
 
     const allTodoIds = Object.keys(response.data);
     const todos = allTodoIds.map(id => {
